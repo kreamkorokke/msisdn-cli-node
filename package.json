@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/kreamkorokke/msisdn-cli-node/issues"
   },
-  "homepage": "https://github.com/kreamkorokke/msisdn-cli-node#readme"
+  "homepage": "https://github.com/kreamkorokke/msisdn-cli-node#readme",
+  "dependencies": {
+    "coffee-script": "^1.9.3",
+    "docopt": "^0.6.2",
+    "install": "^0.1.8",
+    "npm": "^2.11.2"
+  }
 }
