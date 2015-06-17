@@ -1,26 +1,30 @@
 {
   "name": "msisdn-cli-node",
-  "version": "1.0.0",
   "description": "Node.js version of msisdn-cli",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kreamkorokke/msisdn-cli-node.git"
-  },
+  "version": "1.0.0",
   "author": "kreamkorokke",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/kreamkorokke/msisdn-cli-node/issues"
   },
-  "homepage": "https://github.com/kreamkorokke/msisdn-cli-node#readme",
   "dependencies": {
+<<<<<<< HEAD
     "coffee-script": "^1.9.3",
     "docopt": "^0.6.2",
     "install": "^0.1.8",
     "npm": "^2.11.2",
     "request": "^2.58.0"
+=======
+    "docopt": "^0.6.2"
+  },
+  "homepage": "https://github.com/kreamkorokke/msisdn-cli-node#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kreamkorokke/msisdn-cli-node.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+>>>>>>> 60824b851e8c6541a7287555c58e81bf63ad13bc
   }
 }

@@ -1,17 +1,19 @@
+#!/usr/bin/env node
+
 var pkg = require("./package.json")
 var request = require("request");
 var doc, docopt;
 
 doc = [
-	"This program helps you test a MSISDN Gateway server from the CLI.",
-	"Usage:",
-	"  index --host=<host> --mcc=<mcc> [(--audience=<audience> (--dry-run | --login-endpoint=<endpoint>))] [(--data=<data> | --json=<json>)] [--insecure] [options]",
-	"  index --host=<host> --mcc=<mcc> [(--audience=<audience> --dry-run --login-endpoint=<endpoint>)] [(--data=<data> | --json=<json>)] [--insecure] [options]",
-	"  index -h | --help",
-	"  index --version",
-	"Options:",
-	"  -h --help                       Show this screen.",
-	"  --version                       Show version.",
+    "This program helps you test a MSISDN Gateway server from the CLI.",
+    "Usage:",
+    "  index --host=<host> --mcc=<mcc> [(--audience=<audience> (--dry-run | --login-endpoint=<endpoint>))] [(--data=<data> | --json=<json>)] [--insecure] [options]",
+    "  index --host=<host> --mcc=<mcc> [(--audience=<audience> --dry-run --login-endpoint=<endpoint>)] [(--data=<data> | --json=<json>)] [--insecure] [options]",
+    "  index -h | --help",
+    "  index --version",
+    "Options:",
+    "  -h --help                       Show this screen.",
+    "  --version                       Show version.",
     "  -H --host=<host>                The MobileID host",
     "  -c --mcc=<mcc>                  Mobile Country Code (3 digits) ie: 214",
     "  --mnc=<mnc>                     Mobile Network Code (2 or 3 digits) ie: 07",
@@ -38,7 +40,7 @@ var headers = {"Content-type": "application/json"};
 
 var verify = true;
 if (arguments["--insecure"]) {
-	verify = false;
+  verify = false;
 }
 
 // 1. Start the discover
