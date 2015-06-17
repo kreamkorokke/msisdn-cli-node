@@ -1,9 +1,5 @@
 var pkg = require("./package.json")
-
-String.prototype.rtrim = function(trim_char) {
-    return this.replace(/\s*$/g, trim_char);
-}
-
+var request = require("request");
 var doc, docopt;
 
 doc = [
@@ -38,7 +34,7 @@ var arguments = docopt(doc, {
 });
 console.log(arguments);
 var host = arguments["--host"].replace(/\/*$/g, "");
-var headers = {"content-type": "application/json"};
+var headers = {"Content-type": "application/json"};
 
 var verify = true;
 if (arguments["--insecure"]) {
@@ -46,4 +42,16 @@ if (arguments["--insecure"]) {
 }
 
 // 1. Start the discover
-url = "%s/discover"
+var url = host.concat("/discover");
+discover_args = {"mcc": arguments["--mcc"], "roaming": false};
+if (arguments["--mnc"]) {
+	discover_args["mnc"] = arguments["--mnc"];
+}
+if (arguments["--msisdn"]) {
+	discover_args["msisdn"] = arguments["--msisdn"];
+}
+
+var options = {
+	url: url,
+	headers: headers
+};
