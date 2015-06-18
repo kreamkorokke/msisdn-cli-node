@@ -2,9 +2,9 @@
 
 var pkg = require("./package.json")
 var request = require("request");
-var doc, docopt;
+var docopt = require("docopt").docopt;
 
-doc = [
+var doc = [
     "This program helps you test a MSISDN Gateway server from the CLI.",
     "Usage:",
     "  index --host=<host> --mcc=<mcc> [(--audience=<audience> (--dry-run | --login-endpoint=<endpoint>))] [(--data=<data> | --json=<json>)] [--insecure] [options]",
@@ -29,18 +29,15 @@ doc = [
 ].join('\n');
 
 
-docopt = require("docopt").docopt;
-
 var arguments = docopt(doc, {
-  version: pkg.version
+    version: pkg.version
 });
-console.log(arguments);
 var host = arguments["--host"].replace(/\/*$/g, "");
 var headers = {"Content-type": "application/json"};
 
 var verify = true;
 if (arguments["--insecure"]) {
-  verify = false;
+    verify = false;
 }
 
 // 1. Start the discover
@@ -53,7 +50,33 @@ if (arguments["--msisdn"]) {
 	discover_args["msisdn"] = arguments["--msisdn"];
 }
 
+// TODO: check SSL configuration
+url = host.concat("/register");
 var options = {
 	url: url,
-	headers: headers
+	headers: headers,
+    method: "POST",
+    body: JSON.stringify(discover_args)
 };
+
+var discover;
+var discover_request = request.post(options, function(error, response, body) {
+    if (error) throw error;
+    if (response.statusCode != 200) {
+        throw response;
+    }else{
+        discover = response;
+    }
+});
+
+console.log(discover);
+
+// var register_request = request.post(options, function(error, response, body) {
+//     if (error) throw error;
+//     if (response.statusCode != 200) {
+//         console.log(response);
+//     }else{
+//         console.log('success');
+//     }
+// });
+
