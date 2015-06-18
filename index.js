@@ -35,6 +35,7 @@ var args = docopt(doc, {
 });
 var host = args["--host"].replace(/\/*$/g, "");
 var headers = {"Content-type": "application/json"};
+var discover, discover_args, register, hawk_auth, hawkId, method;
 
 var verify = true;
 if (args["--insecure"]) {
@@ -45,7 +46,7 @@ if (args["--insecure"]) {
 // 1. Start the discover
 new Promise(function (resolve, reject) {
     var url = host.concat("/discover");
-    var discover_args = {"mcc": args["--mcc"], "roaming": false};
+    discover_args = {"mcc": args["--mcc"], "roaming": false};
     if (args["--mnc"]) {
      discover_args["mnc"] = args["--mnc"];
     }
@@ -56,21 +57,41 @@ new Promise(function (resolve, reject) {
     var options = {
         url: url,
         headers: headers,
-        method: "POST",
         body: JSON.stringify(discover_args)
     };
 
     request.post(options, function(error, response, body) {
         if (error) throw error;
         if (response.statusCode != 200) {
-            //console.log(response);
+            console.log(response);
             throw response;
         }else{
-            resolve(response);
+            resolve(JSON.parse(body));
         }
     });
 }).then(function(response) {
-    var discover = response;
+    discover = response;
+
+    // 1.1 Register
+    return new Promise(function (resolve, reject) {
+        var url = host.concat("/register");
+        var options = {
+            url: url,
+            headers: headers
+        };
+        request.post(options, function(error, response, body) {
+            if (error) throw error;
+            if (response.statusCode != 200) {
+                console.log(response);
+                throw response;
+            }else{
+                resolve(JSON.parse(body));
+            }
+        });
+    });
+}).then(function(response) {
+    register = response;
+    method = discover["verificationMethods"][0];
 });
 
 // var register_request = request.post(options, function(error, response, body) {
