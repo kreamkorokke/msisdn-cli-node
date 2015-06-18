@@ -3,6 +3,7 @@
 var pkg = require("./package.json")
 var request = require("request");
 var docopt = require("docopt").docopt;
+var Promise = require("promise");
 
 var doc = [
     "This program helps you test a MSISDN Gateway server from the CLI.",
@@ -29,47 +30,48 @@ var doc = [
 ].join('\n');
 
 
-var arguments = docopt(doc, {
+var args = docopt(doc, {
     version: pkg.version
 });
-var host = arguments["--host"].replace(/\/*$/g, "");
+var host = args["--host"].replace(/\/*$/g, "");
 var headers = {"Content-type": "application/json"};
 
 var verify = true;
-if (arguments["--insecure"]) {
+if (args["--insecure"]) {
     verify = false;
 }
 
+
 // 1. Start the discover
-var url = host.concat("/discover");
-discover_args = {"mcc": arguments["--mcc"], "roaming": false};
-if (arguments["--mnc"]) {
-	discover_args["mnc"] = arguments["--mnc"];
-}
-if (arguments["--msisdn"]) {
-	discover_args["msisdn"] = arguments["--msisdn"];
-}
-
-// TODO: check SSL configuration
-url = host.concat("/register");
-var options = {
-	url: url,
-	headers: headers,
-    method: "POST",
-    body: JSON.stringify(discover_args)
-};
-
-var discover;
-var discover_request = request.post(options, function(error, response, body) {
-    if (error) throw error;
-    if (response.statusCode != 200) {
-        throw response;
-    }else{
-        discover = response;
+new Promise(function (resolve, reject) {
+    var url = host.concat("/discover");
+    var discover_args = {"mcc": args["--mcc"], "roaming": false};
+    if (args["--mnc"]) {
+     discover_args["mnc"] = args["--mnc"];
     }
-});
+    if (args["--msisdn"]) {
+     discover_args["msisdn"] = args["--msisdn"];
+    }
 
-console.log(discover);
+    var options = {
+        url: url,
+        headers: headers,
+        method: "POST",
+        body: JSON.stringify(discover_args)
+    };
+
+    request.post(options, function(error, response, body) {
+        if (error) throw error;
+        if (response.statusCode != 200) {
+            //console.log(response);
+            throw response;
+        }else{
+            resolve(response);
+        }
+    });
+}).then(function(response) {
+    var discover = response;
+});
 
 // var register_request = request.post(options, function(error, response, body) {
 //     if (error) throw error;
